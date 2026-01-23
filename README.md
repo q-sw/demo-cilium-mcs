@@ -77,3 +77,37 @@ helm upgrade --install kube-system-cilium cilium/cilium \
 ```bash
 cilium status
 ```
+
+## Bootstrap FluxCD and Manage Cilium with FluxCD
+
+### Step 1: Bootstrap FluxCD in the Paris Cluster
+
+> You should have an SSH key pair allowed on GitHub
+
+```bash
+flux bootstrap git --url=ssh://git@github.com/${GITHUB_USERNAME}/${REPO_NAME}.git \
+    --branch=main --path=flux/clusters/paris --private-key-file ${KEY_PATH} \
+    --context paris
+```
+
+### Step 2: Bootstrap FluxCD in the New York Cluster
+
+```bash
+flux bootstrap git --url=ssh://git@github.com/${GITHUB_USERNAME}/${REPO_NAME}.git \
+    --branch=main --path=flux/clusters/newyork --private-key-file ${KEY_PATH} \
+    --context newyork
+```
+
+### Some commands to check FluxCD Status
+
+```bash
+flux get kustomizations
+kubectl get kustomizations.kustomize.toolkit.fluxcd.io -A
+kubectl get helmreleases.helm.toolkit.fluxcd.io -A
+```
+
+### Check Helm Values deployed by FluxCD
+
+```bash
+kubectl get helmrelease cilium -n flux-system -o yaml
+```

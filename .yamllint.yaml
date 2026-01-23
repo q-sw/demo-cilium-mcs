@@ -16,5 +16,7 @@ rules:
   comments:
     min-spaces-from-content: 1
 
+  document-start: disable
+
 ignore: |
-  app/chart/templates/
+  flux/clusters/**/flux-system/

@@ -1,0 +1,39 @@
+installCRDs: true
+
+kubeProxyReplacement: true
+k8sServicePort: 6443
+
+l7Proxy: true
+
+envoy:
+  enabled: true
+
+ingressController:
+  enabled: true
+  service:
+    type: NodePort
+    insecureNodePort: 30080
+    secureNodePort: 30443
+  gatewayAPI:
+    gatewayClassName: cilium
+
+socketLB:
+  hostNamespaceOnly: true
+
+l2announcements:
+  enabled: false
+
+prometheus:
+  enabled: true
+  serviceMonitor:
+    enabled: false
+
+gatewayAPI:
+  enabled: true
+
+hubble:
+  enabled: true
+  relay:
+    enabled: true
+  ui:
+    enabled: true
