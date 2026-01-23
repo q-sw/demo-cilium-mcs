@@ -1,0 +1,4 @@
+---
+pod_cidr: "10.200.0.0/16"
+cluster_name: "cluster-paris"
+cp_endpoint: "cp.paris.internal"

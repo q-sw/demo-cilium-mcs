@@ -1,0 +1,4 @@
+---
+pod_cidr: "10.201.0.0/16"
+cluster_name: "cluster-newyork"
+cp_endpoint: "cp.newyork.internal"

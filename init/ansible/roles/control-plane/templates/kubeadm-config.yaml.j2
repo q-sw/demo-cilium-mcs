@@ -1,0 +1,22 @@
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: InitConfiguration
+localAPIEndpoint:
+  advertiseAddress: "{{ private_ip }}"
+  bindPort: 6443
+nodeRegistration:
+  name: "{{ inventory_hostname }}"
+  taints: null
+skipPhases:
+  - addon/kube-proxy
+---
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: ClusterConfiguration
+kubernetesVersion: v{{ k8s_version_full }}
+controlPlaneEndpoint: "{{ cp_endpoint }}:6443"
+networking:
+  serviceSubnet: "{{ service_cidr }}"
+  podSubnet: "{{ pod_cidr }}"
+  dnsDomain: cluster.local
+dns:
+  imageRepository: registry.k8s.io/coredns
+  imageTag: v1.12.2

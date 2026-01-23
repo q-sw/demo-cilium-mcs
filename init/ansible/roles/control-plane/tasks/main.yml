@@ -1,0 +1,44 @@
+---
+- name: Check if Kubernetes is already initialized
+  stat:
+    path: /etc/kubernetes/admin.conf
+  register: kubeadmin_conf
+
+- name: Deploy kubeadm configuration file
+  template:
+    src: kubeadm-config.yaml.j2
+    dest: /tmp/kubeadm-config.yaml
+  when: not kubeadmin_conf.stat.exists
+
+- name: Initialize Kubernetes cluster (with config file)
+  command: kubeadm init --config /tmp/kubeadm-config.yaml --upload-certs
+  become: true
+  when: not kubeadmin_conf.stat.exists
+  register: kubeadm_init
+
+- name: Create .kube directory
+  file:
+    path: "/home/{{ ansible_user }}/.kube"
+    state: directory
+    mode: "0755"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+- name: Copy admin.conf to user's kube config
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "/home/{{ ansible_user }}/.kube/config"
+    remote_src: true
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0600"
+  become: true
+
+- name: Get join command
+  command: kubeadm token create --print-join-command
+  register: join_command_raw
+  become: true
+
+- name: Set join command fact
+  set_fact:
+    join_command: "{{ join_command_raw.stdout_lines[0] }}"

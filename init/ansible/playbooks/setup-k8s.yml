@@ -1,0 +1,45 @@
+---
+# --- Setup Common Dependencies ---
+- name: Prepare all nodes
+  hosts: all
+  roles:
+    - common
+
+# --- Cluster Paris ---
+- name: Initialize Control Plane (Paris)
+  hosts: cluster_paris:&k8s_role_control_plane
+  roles:
+    - control-plane
+
+- name: Join Workers (Paris)
+  hosts: cluster_paris:&k8s_role_worker
+  tasks:
+    - name: Retrieve join command
+      set_fact:
+        # On suppose un seul CP par cluster pour cette demo
+        join_command: "{{ hostvars[groups['cluster_paris'] | intersect(groups['k8s_role_control_plane']) | first]['join_command'] }}"
+
+    - name: Join cluster
+      command: "{{ join_command }}"
+      become: true
+      args:
+        creates: /etc/kubernetes/kubelet.conf
+
+# --- Cluster New York ---
+- name: Initialize Control Plane (New York)
+  hosts: cluster_newyork:&k8s_role_control_plane
+  roles:
+    - control-plane
+
+- name: Join Workers (New York)
+  hosts: cluster_newyork:&k8s_role_worker
+  tasks:
+    - name: Retrieve join command
+      set_fact:
+        join_command: "{{ hostvars[groups['cluster_newyork'] | intersect(groups['k8s_role_control_plane']) | first]['join_command'] }}"
+
+    - name: Join cluster
+      command: "{{ join_command }}"
+      become: true
+      args:
+        creates: /etc/kubernetes/kubelet.conf

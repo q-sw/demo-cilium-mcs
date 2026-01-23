@@ -1,0 +1,27 @@
+plugin: google.cloud.gcp_compute
+projects:
+  - qsw-demo-multi-cluster
+zones:
+  - europe-west9-a
+  - europe-west9-b
+  - europe-west9-c
+  - us-east1-a
+  - us-east1-b
+  - us-east1-c
+filters:
+  - status = RUNNING
+auth_kind: application
+scopes:
+  - "https://www.googleapis.com/auth/cloud-platform"
+  - "https://www.googleapis.com/auth/compute.readonly"
+keyed_groups:
+  - key: labels['k8s-role']
+    prefix: "k8s_role"
+  - key: labels['cluster-name']
+    prefix: "cluster"
+hostnames:
+  - name
+compose:
+  ansible_host: networkInterfaces[0].accessConfigs[0].natIP
+  local_zone: zone.split('/')[-1]
+  private_ip: networkInterfaces[0].networkIP
