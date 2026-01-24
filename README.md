@@ -60,7 +60,7 @@ make dns-local
 
 ```bash
 helm upgrade --install kube-system-cilium cilium/cilium \
-    --version 1.19.0-rc.0 --namespace kube-system --context paris\
+    --version 1.19.0-rc.0 --namespace kube-system --kube-context paris\
     -f init/cilium/values-paris.yaml
 ```
 
@@ -68,7 +68,7 @@ helm upgrade --install kube-system-cilium cilium/cilium \
 
 ```bash
 helm upgrade --install kube-system-cilium cilium/cilium \
-    --version 1.19.0-rc.0 --namespace kube-system --context newyork\
+    --version 1.19.0-rc.0 --namespace kube-system --kube-context newyork\
     -f init/cilium/values-newyork.yaml
 ```
 
