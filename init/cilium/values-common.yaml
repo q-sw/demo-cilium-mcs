@@ -1,0 +1,25 @@
+---
+kubeProxyReplacement: true
+hubble:
+  enabled: true
+  tls:
+    auto:
+      method: cronJob
+  relay:
+    enabled: true
+  ui:
+    enabled: true
+clustermesh:
+  useAPIServer: true
+  config:
+    enabled: true
+    domain: clustermesh.internal
+  apiserver:
+    # FIXME: If you need HA increase this to 2 or more
+    replicas: 1
+    service:
+      nodePort: 32379
+    tls:
+      authMode: cluster
+      auto:
+        method: cronJob

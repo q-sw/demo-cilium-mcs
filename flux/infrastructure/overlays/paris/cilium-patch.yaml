@@ -14,36 +14,9 @@ spec:
         clusterPoolIPv4PodCIDRList:
           - 10.200.0.0/16
     clustermesh:
-      useAPIServer: true
-      config:
-        enabled: true
-        domain: clustermesh.internal
-        clusters:
-          - name: cluster-newyork
-            address: cp.newyork.clustermesh.internal
-            port: 32379
       apiserver:
-        kvstoremesh:
-          enable: true
-        replicas: 1
-        service:
-          nodePort: 32379
         tls:
-          authMode: cluster
           server:
             extraDnsNames:
               - "*.clustermesh.internal"
               - cp.paris.clustermesh.internal
-              - cp.newyork.clustermesh.internal
-      mcsapi:
-        enabled: true
-        installCRDs: true
-        corednsAutoConfigure:
-          enabled: true
-          coredns:
-            deploymentName: coredns
-            serviceAccountName: coredns
-            configMapName: coredns
-            namespace: kube-system
-            clusterDomain: cluster.local
-            clustersetDomain: clusterset.local

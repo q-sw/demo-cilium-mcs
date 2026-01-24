@@ -1,12 +1,5 @@
-installCRDs: true
-
 kubeProxyReplacement: true
 k8sServicePort: 6443
-
-l7Proxy: true
-
-envoy:
-  enabled: true
 
 ingressController:
   enabled: true
@@ -24,7 +17,8 @@ l2announcements:
   enabled: false
 
 prometheus:
-  enabled: true
+  # FIXME: Enable if you are using prometheus / prometheus operator
+  enabled: false
   serviceMonitor:
     enabled: false
 
@@ -33,7 +27,36 @@ gatewayAPI:
 
 hubble:
   enabled: true
+  tls:
+    auto:
+      method: cronJob
   relay:
     enabled: true
   ui:
     enabled: true
+
+clustermesh:
+  useAPIServer: true
+  config:
+    enabled: true
+    domain: clustermesh.internal
+    clusters:
+      cluster-paris:
+        address: cp.paris.clustermesh.internal
+        port: 32379
+      cluster-newyork:
+        address: cp.newyork.clustermesh.internal
+        port: 32379
+  apiserver:
+    # FIXME: If you need HA increase this to 2 or more
+    replicas: 1
+    service:
+      nodePort: 32379
+    tls:
+      authMode: cluster
+      auto:
+        method: cronJob
+  mcsapi:
+    enabled: true
+    corednsAutoConfigure:
+      enabled: true
