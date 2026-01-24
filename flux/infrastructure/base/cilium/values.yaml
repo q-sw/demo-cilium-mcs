@@ -1,12 +1,5 @@
-installCRDs: true
-
 kubeProxyReplacement: true
 k8sServicePort: 6443
-
-l7Proxy: true
-
-envoy:
-  enabled: true
 
 ingressController:
   enabled: true
@@ -24,7 +17,8 @@ l2announcements:
   enabled: false
 
 prometheus:
-  enabled: true
+  # FIXME: Enable if you are using prometheus / prometheus operator
+  enabled: false
   serviceMonitor:
     enabled: false
 
