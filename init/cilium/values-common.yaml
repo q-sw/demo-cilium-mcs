@@ -2,6 +2,9 @@
 kubeProxyReplacement: true
 hubble:
   enabled: true
+  tls:
+    auto:
+      method: cronJob
   relay:
     enabled: true
   ui:
@@ -18,3 +21,5 @@ clustermesh:
       nodePort: 32379
     tls:
       authMode: cluster
+      auto:
+        method: cronJob
