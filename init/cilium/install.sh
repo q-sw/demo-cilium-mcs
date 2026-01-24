@@ -2,7 +2,7 @@
 set -e
 
 # Configuration
-CILIUM_VERSION="1.18.6" # Version stable récente
+CILIUM_VERSION="1.19.0-rc.0"
 CTX_PARIS="paris"
 CTX_NY="newyork"
 
@@ -14,13 +14,13 @@ echo "=== Installing Cilium on Paris ==="
 helm upgrade --install kube-system-cilium cilium/cilium --version $CILIUM_VERSION \
     --namespace kube-system \
     --kube-context $CTX_PARIS \
-    -f values-paris.yaml
+    -f values-common.yaml -f values-paris.yaml
 
 echo "=== Installing Cilium on New York ==="
 helm upgrade --install kube-system-cilium cilium/cilium --version $CILIUM_VERSION \
     --namespace kube-system \
     --kube-context $CTX_NY \
-    -f values-newyork.yaml
+    -f values-common.yaml -f values-newyork.yaml
 
 echo "=== Waiting for Cilium to be ready ==="
 cilium status --context $CTX_PARIS --wait
