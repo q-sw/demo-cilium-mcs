@@ -14,6 +14,26 @@ resource "google_compute_subnetwork" "subnet_paris" {
   ip_cidr_range = var.cidr_paris
   region        = var.region_paris
   network       = google_compute_network.vpc_paris.id
+
+  secondary_ip_range {
+    range_name    = "pods"
+    ip_cidr_range = var.pods_cidr_paris
+  }
+
+  secondary_ip_range {
+    range_name    = "lb-alias"
+    ip_cidr_range = var.lb_cidr_paris
+  }
+}
+
+# Proxy-only subnet for Paris (Required for Regional Envoy-based LBs)
+resource "google_compute_subnetwork" "proxy_subnet_paris" {
+  name          = "proxy-subnet-paris"
+  ip_cidr_range = "10.129.0.0/23"
+  region        = var.region_paris
+  network       = google_compute_network.vpc_paris.id
+  purpose       = "REGIONAL_MANAGED_PROXY"
+  role          = "ACTIVE"
 }
 
 # --- VPC New York ---
@@ -32,6 +52,26 @@ resource "google_compute_subnetwork" "subnet_newyork" {
   ip_cidr_range = var.cidr_newyork
   region        = var.region_newyork
   network       = google_compute_network.vpc_newyork.id
+
+  secondary_ip_range {
+    range_name    = "pods"
+    ip_cidr_range = var.pods_cidr_newyork
+  }
+
+  secondary_ip_range {
+    range_name    = "lb-alias"
+    ip_cidr_range = var.lb_cidr_newyork
+  }
+}
+
+# Proxy-only subnet for New York
+resource "google_compute_subnetwork" "proxy_subnet_newyork" {
+  name          = "proxy-subnet-newyork"
+  ip_cidr_range = "10.130.0.0/23"
+  region        = var.region_newyork
+  network       = google_compute_network.vpc_newyork.id
+  purpose       = "REGIONAL_MANAGED_PROXY"
+  role          = "ACTIVE"
 }
 
 # --- VPC Peering (Bidirectional) ---

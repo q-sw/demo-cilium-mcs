@@ -50,6 +50,34 @@ resource "google_compute_firewall" "allow_from_ny" {
   source_ranges = [var.cidr_newyork]
 }
 
+# --- Gateway API / Load Balancer Rules (Paris) ---
+
+# Allow traffic from Proxy Subnet to Gateway (NodePort)
+resource "google_compute_firewall" "allow_proxy_subnet_paris" {
+  name    = "allow-proxy-subnet-paris"
+  network = google_compute_network.vpc_paris.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["30080"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+}
+
+# Allow GCP Health Checks
+resource "google_compute_firewall" "allow_gcp_health_checks" {
+  name    = "allow-gcp-health-checks"
+  network = google_compute_network.vpc_paris.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["30080"]
+  }
+
+  source_ranges = ["35.191.0.0/16", "130.211.0.0/22"]
+}
+
 
 # --- Firewall New York ---
 
@@ -101,4 +129,32 @@ resource "google_compute_firewall" "allow_from_paris" {
   }
 
   source_ranges = [var.cidr_paris]
+}
+
+# --- Gateway API / Load Balancer Rules (New York) ---
+
+# Allow traffic from Proxy Subnet to Gateway (NodePort)
+resource "google_compute_firewall" "allow_proxy_subnet_newyork" {
+  name    = "allow-proxy-subnet-newyork"
+  network = google_compute_network.vpc_newyork.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["30080"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+}
+
+# Allow GCP Health Checks for New York
+resource "google_compute_firewall" "allow_gcp_health_checks_newyork" {
+  name    = "allow-gcp-health-checks-newyork"
+  network = google_compute_network.vpc_newyork.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["30080"]
+  }
+
+  source_ranges = ["35.191.0.0/16", "130.211.0.0/22"]
 }

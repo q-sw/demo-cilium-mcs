@@ -142,3 +142,46 @@ resource "google_compute_instance" "worker_newyork" {
     ssh-keys       = "ubuntu:${file(var.ssh_pub_key_path)}"
   }
 }
+
+# --- Instance Groups ---
+resource "google_compute_instance_group" "paris_nodes" {
+  name        = "k8s-nodes-paris"
+  description = "Unmanaged Instance Group for Paris K8s Nodes"
+  zone        = "${var.region_paris}-b"
+
+  instances = [
+    google_compute_instance.cp_paris.self_link,
+    google_compute_instance.worker_paris.self_link
+  ]
+
+  named_port {
+    name = "http"
+    port = 30080
+  }
+
+  named_port {
+    name = "https"
+    port = 443
+  }
+}
+
+resource "google_compute_instance_group" "newyork_nodes" {
+  name        = "k8s-nodes-newyork"
+  description = "Unmanaged Instance Group for New York K8s Nodes"
+  zone        = "${var.region_newyork}-b"
+
+  instances = [
+    google_compute_instance.cp_newyork.self_link,
+    google_compute_instance.worker_newyork.self_link
+  ]
+
+  named_port {
+    name = "http"
+    port = 30080
+  }
+
+  named_port {
+    name = "https"
+    port = 443
+  }
+}

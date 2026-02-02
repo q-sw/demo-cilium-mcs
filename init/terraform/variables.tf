@@ -28,6 +28,30 @@ variable "cidr_newyork" {
   default     = "10.20.0.0/16"
 }
 
+variable "pods_cidr_paris" {
+  description = "CIDR block for Paris Pods (Secondary Range)"
+  type        = string
+  default     = "10.200.0.0/16"
+}
+
+variable "pods_cidr_newyork" {
+  description = "CIDR block for New York Pods (Secondary Range)"
+  type        = string
+  default     = "10.201.0.0/16"
+}
+
+variable "lb_cidr_paris" {
+  description = "CIDR block for Paris Load Balancers (Secondary Range)"
+  type        = string
+  default     = "10.150.0.0/24"
+}
+
+variable "lb_cidr_newyork" {
+  description = "CIDR block for New York Load Balancers (Secondary Range)"
+  type        = string
+  default     = "10.151.0.0/24"
+}
+
 variable "machine_type" {
   description = "Machine type for K8s nodes"
   type        = string
