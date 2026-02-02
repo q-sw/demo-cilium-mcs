@@ -1,9 +1,6 @@
-# Démonstration 2: Kubernetes MCS API (ServiceExport)
-# Standard Kubernetes, nécessite les CRDs MCS installées.
-
 service:
   type: ClusterIP
   global: false
 
 mcs:
-  enabled: true # Crée la ressource ServiceExport
+  enabled: true

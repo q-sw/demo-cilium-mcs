@@ -21,7 +21,7 @@ mcs:
 gateway:
   enabled: false
   name: cilium-gateway
-  namespace: kube-system # Namespace où la Gateway (GatewayClass) est instanciée ou écoutée
+  namespace: kube-system
   hostname: "demo.qws.xyz"
   mcsHostname: "demo-mcs.qws.xyz"
   headlessHostname: "demo-headless.qws.xyz"
