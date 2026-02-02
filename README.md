@@ -111,3 +111,13 @@ kubectl get helmreleases.helm.toolkit.fluxcd.io -A
 ```bash
 kubectl get helmrelease cilium -n flux-system -o yaml
 ```
+
+## Demo
+
+### Demo Part 1
+
+![demo_part1](docs/demo_part1.gif)
+
+### Demo Part 2
+
+![demo_part2](docs/demo_part2.gif)
