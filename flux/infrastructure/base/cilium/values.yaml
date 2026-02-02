@@ -8,15 +8,6 @@ l7Proxy: true
 envoy:
   enabled: true
 
-  # ingressController:
-#  enabled: true
-#  service:
-#    type: NodePort
-#    insecureNodePort: 30080
-#    secureNodePort: 30443
-#  gatewayAPI:
-#    gatewayClassName: cilium
-
 socketLB:
   hostNamespaceOnly: true
 
@@ -30,8 +21,9 @@ loadBalancer:
   l7:
     backend: envoy
 
+# FIXME: Enable if you are using prometheus / prometheus operator
 prometheus:
-  enabled: true
+  enabled: false
   serviceMonitor:
     enabled: false
 
@@ -44,3 +36,6 @@ hubble:
     enabled: true
   ui:
     enabled: true
+  tls:
+    auto:
+      method: cronJob
