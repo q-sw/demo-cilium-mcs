@@ -19,12 +19,16 @@ spec:
         enabled: true
         domain: clustermesh.internal
         clusters:
-          - name: cluster-paris
+          cluster-paris:
             address: cp.paris.clustermesh.internal
+            port: 32379
+          cluster-newyork:
+            address: cp.newyork.clustermesh.internal
             port: 32379
       apiserver:
         kvstoremesh:
           enable: true
+        # FIXME: If you need HA increase this to 2 or more
         replicas: 1
         service:
           nodePort: 32379
@@ -40,10 +44,3 @@ spec:
         installCRDs: true
         corednsAutoConfigure:
           enabled: true
-          coredns:
-            deploymentName: coredns
-            serviceAccountName: coredns
-            configMapName: coredns
-            namespace: kube-system
-            clusterDomain: cluster.local
-            clustersetDomain: clusterset.local
