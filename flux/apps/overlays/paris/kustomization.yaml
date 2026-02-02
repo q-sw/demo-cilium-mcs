@@ -1,0 +1,12 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base/demo-app
+  - ../../base/toolbox
+  - policies/deny-newyork.yaml
+patches:
+  - path: patch-values.yaml
+    target:
+      kind: HelmRelease
+      name: demo-app

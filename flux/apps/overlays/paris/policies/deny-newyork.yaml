@@ -1,0 +1,22 @@
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: deny-ingress-from-newyork
+  namespace: default
+spec:
+  endpointSelector:
+    matchLabels:
+      app: demo-app
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            io.cilium.k8s.policy.cluster: "cluster-paris"
+    - fromEndpoints:
+        - matchLabels:
+            "reserved:ingress": ""
+  ingressDeny:
+    - fromEndpoints:
+        - matchLabels:
+            app: demo-app
+            io.cilium.k8s.policy.cluster: "cluster-newyork"

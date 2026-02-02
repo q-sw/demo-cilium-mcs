@@ -1,0 +1,26 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: demo-app
+  namespace: default
+spec:
+  interval: 1m
+  chart:
+    spec:
+      chart: ./app/chart
+      reconcileStrategy: Revision
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  values:
+    replicaCount: 2
+    image:
+      repository: europe-west9-docker.pkg.dev/qsw-main/qsw-docker/mcs-demo
+      tag: "1.0.0"
+      pullPolicy: Always
+    service:
+      type: ClusterIP
+      port: 80
+    mcs:
+      enabled: true

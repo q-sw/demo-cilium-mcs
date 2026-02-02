@@ -1,0 +1,27 @@
+replicaCount: 2
+
+image:
+  repository: ttl.sh/demo-multi-cluster # Ephemeral registry for dev
+  pullPolicy: IfNotPresent
+  tag: "1h"
+
+clusterName: "local"
+
+service:
+  type: ClusterIP
+  port: 80
+
+  # Option 1: Cilium Global Service (Annotation)
+  global: false
+
+mcs:
+  # Option 2: Kubernetes MCS API (ServiceExport)
+  enabled: true
+
+gateway:
+  enabled: false
+  name: cilium-gateway
+  namespace: kube-system # Namespace où la Gateway (GatewayClass) est instanciée ou écoutée
+  hostname: "demo.qws.xyz"
+  mcsHostname: "demo-mcs.qws.xyz"
+  headlessHostname: "demo-headless.qws.xyz"

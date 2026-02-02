@@ -1,0 +1,9 @@
+# Démonstration 1: Cilium Global Service (Annotation)
+# Simple, natif Cilium, pas de CRD MCS requise.
+
+service:
+  type: ClusterIP
+  global: true # Active l'annotation service.cilium.io/global
+
+mcs:
+  enabled: false
