@@ -2,7 +2,7 @@
 set -e
 
 # Configuration
-CILIUM_VERSION="1.19.0-rc.0" # Version stable récente
+CILIUM_VERSION="1.19.0-rc.0"
 CTX_PARIS="paris"
 CTX_NY="newyork"
 
@@ -27,7 +27,6 @@ cilium status --context $CTX_PARIS --wait
 cilium status --context $CTX_NY --wait
 
 #echo "=== Connecting Clusters (Cluster Mesh) ==="
-## Cette commande échange les CA et secrets entre les clusters
 #cilium clustermesh connect \
 #    --context $CTX_PARIS \
 #    --destination-context $CTX_NY

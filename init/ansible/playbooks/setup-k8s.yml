@@ -16,7 +16,6 @@
   tasks:
     - name: Retrieve join command
       set_fact:
-        # On suppose un seul CP par cluster pour cette demo
         join_command: "{{ hostvars[groups['cluster_paris'] | intersect(groups['k8s_role_control_plane']) | first]['join_command'] }}"
 
     - name: Join cluster

@@ -26,7 +26,6 @@ resource "google_project_service" "dns" {
   disable_on_destroy = false
 }
 
-# Préparation pour MCS / Fleet
 resource "google_project_service" "gkehub" {
   project = var.project_id
   service = "gkehub.googleapis.com"

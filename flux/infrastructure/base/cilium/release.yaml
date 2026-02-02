@@ -4,7 +4,7 @@ metadata:
   name: cilium
   namespace: flux-system
 spec:
-  releaseName: kube-system-cilium # Nom explicite pour matcher l'existant
+  releaseName: kube-system-cilium
   targetNamespace: kube-system
   interval: 10m
   timeout: 20m
@@ -27,4 +27,4 @@ spec:
   valuesFrom:
     - kind: ConfigMap
       name: cilium-values
-      valuesKey: values.yaml # La clé par défaut est le nom du fichier
+      valuesKey: values.yaml
