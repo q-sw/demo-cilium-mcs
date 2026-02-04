@@ -1,8 +1,8 @@
-.PHONY: help infra-init infra-create infra-destroy k8s-install kubeconfig cilium-install setup-all setup-dns-local
+.PHONY: help infra-init infra-create infra-destroy k8s-install kubeconfig cilium-install app-build app-deploy-global app-deploy-mcs setup-all setup-dns-local
 
 # Variables
 PROJECT_ID ?= $(shell gcloud config get-value project)
-IMAGE_NAME ?= ttl.sh/demo-multi-cluster-$(shell git rev-parse --short HEAD):1h
+IMAGE_NAME ?= europe-west9-docker.pkg.dev/qsw-main/qsw-docker/mcs-demo:latest
 
 help:
 	@printf "Available targets:\n"
@@ -51,7 +51,53 @@ certs-generate: ## Generate shared CA for Cilium Cluster Mesh
 dns-local: ## Update local /etc/hosts with CP Public IPs
 	./scripts/update_local_hosts.sh
 
+gateway-patch: ## Patch Gateway services with fixed NodePorts (30080, 30443)
+	@echo "Patching Paris Gateway Service..."
+	kubectl patch svc -n kube-system cilium-gateway-cilium-gateway --context paris --type='json' -p='[{"op": "replace", "path": "/spec/ports/0/nodePort", "value": 30080}, {"op": "replace", "path": "/spec/ports/1/nodePort", "value": 30443}]' || true
+	@echo "Patching New York Gateway Service..."
+	kubectl patch svc -n kube-system cilium-gateway-cilium-gateway --context newyork --type='json' -p='[{"op": "replace", "path": "/spec/ports/0/nodePort", "value": 30080}, {"op": "replace", "path": "/spec/ports/1/nodePort", "value": 30443}]' || true
+
+gateway-api-install: ## Install Gateway API CRDs (v1.2.0)
+	@echo "Installing Gateway API CRDs..."
+	kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml --context paris
+	kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml --context newyork
+
+#-- Demo Application --
+
+app-build: ## Build and Push Docker image (ttl.sh default)
+	cd app && docker build -t $(IMAGE_NAME) . && docker push $(IMAGE_NAME)
+	@echo "Image pushed: $(IMAGE_NAME)"
+
+app-deploy-global: ## Deploy app with Global Service (Annotation)
+	helm upgrade --install demo-app ./app/chart \
+		--kube-context paris \
+		--set image.repository=$(shell echo $(IMAGE_NAME) | cut -d: -f1) \
+		--set image.tag=$(shell echo $(IMAGE_NAME) | cut -d: -f2) \
+		--set clusterName=paris \
+		-f ./app/chart/values-global-service.yaml
+	helm upgrade --install demo-app ./app/chart \
+		--kube-context newyork \
+		--set image.repository=$(shell echo $(IMAGE_NAME) | cut -d: -f1) \
+		--set image.tag=$(shell echo $(IMAGE_NAME) | cut -d: -f2) \
+		--set clusterName=newyork \
+		-f ./app/chart/values-global-service.yaml
+
+app-deploy-mcs: ## Deploy app with MCS API (ServiceExport)
+	helm upgrade --install demo-app ./app/chart \
+		--kube-context paris \
+		--set image.repository=$(shell echo $(IMAGE_NAME) | cut -d: -f1) \
+		--set image.tag=$(shell echo $(IMAGE_NAME) | cut -d: -f2) \
+		--set clusterName=paris \
+		-f ./app/chart/values-mcs.yaml
+
+	helm upgrade --install demo-app ./app/chart \
+		--kube-context newyork \
+		--set image.repository=$(shell echo $(IMAGE_NAME) | cut -d: -f1) \
+		--set image.tag=$(shell echo $(IMAGE_NAME) | cut -d: -f2) \
+		--set clusterName=newyork \
+		-f ./app/chart/values-mcs.yaml
+
 #-- All-in-One --
 
-setup-all: infra-create k8s-install dns-local kubeconfig certs-generate ## Run full setup (Infra -> K9s -> Cilium)
+setup-all: infra-create k8s-install dns-local kubeconfig certs-generate gateway-api-install ## Run full setup (Infra -> K9s -> Cilium -> Gateway)
 	@echo "Setup complete! You can now deploy the app with 'make app-deploy-global'"
