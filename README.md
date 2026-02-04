@@ -2,6 +2,8 @@
 
 > Configure and Manage Cilium MCS-API with FluxCD
 
+![demo-arch](./docs/demo-arch.png)
+
 ## Requirements
 
 - GCP Account

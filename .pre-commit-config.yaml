@@ -12,6 +12,7 @@ repos:
         # Exclude helm templates and other non-standard yaml files from check-yaml
         exclude: &exclude_non_pure_yaml ^app/chart/templates/.*\.yaml$
       - id: check-added-large-files
+        args: ['--maxkb=1000']
       - id: check-merge-conflict
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.37.1
