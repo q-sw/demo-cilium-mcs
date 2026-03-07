@@ -1,6 +1,4 @@
 ---
-installCRDs: true
-
 cluster:
   name: cluster-paris
   id: 1
@@ -13,11 +11,8 @@ ipam:
 kubeProxyReplacement: true
 k8sServiceHost: cp.paris.internal
 k8sServicePort: 6443
-envoy:
-  enabled: true
 
 hubble:
-  enabled: true
   relay:
     enabled: true
   ui:

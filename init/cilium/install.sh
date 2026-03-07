@@ -2,7 +2,7 @@
 set -e
 
 # Configuration
-CILIUM_VERSION="1.19.0-rc.0"
+CILIUM_VERSION="1.19.1"
 CTX_PARIS="paris"
 CTX_NY="newyork"
 
