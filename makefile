@@ -2,7 +2,7 @@
 
 # Variables
 PROJECT_ID ?= $(shell gcloud config get-value project)
-IMAGE_NAME ?= europe-west9-docker.pkg.dev/qsw-main/qsw-docker/mcs-demo:latest
+IMAGE_NAME ?= europe-west9-docker.pkg.dev/qsw-main/qsw-docker/mcs-demo:2.0.0
 
 help:
 	@printf "Available targets:\n"

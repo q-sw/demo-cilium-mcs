@@ -17,7 +17,7 @@ spec:
     replicaCount: 2
     image:
       repository: europe-west9-docker.pkg.dev/qsw-main/qsw-docker/mcs-demo
-      tag: "1.0.0"
+      tag: "2.0.0"
       pullPolicy: Always
     service:
       type: ClusterIP
