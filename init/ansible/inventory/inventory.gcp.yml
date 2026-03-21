@@ -1,22 +1,19 @@
 plugin: google.cloud.gcp_compute
+projects:
+  - qsw-demo-multi-cluster
 zones:
-  - europe-west9-a
   - europe-west9-b
-  - europe-west9-c
-  - europe-west4-a
   - europe-west4-b
-  - europe-west4-c
 filters:
   - status = RUNNING
 auth_kind: application
-scopes:
-  - "https://www.googleapis.com/auth/cloud-platform"
-  - "https://www.googleapis.com/auth/compute.readonly"
 keyed_groups:
   - key: labels['k8s-role']
     prefix: "k8s_role"
+    separator: "_"
   - key: labels['cluster-name']
     prefix: "cluster"
+    separator: "_"
 hostnames:
   - name
 compose:
