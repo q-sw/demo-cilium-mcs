@@ -4,7 +4,7 @@
 TYPE_SPEED=20
 WAIT_BETWEEN_COMMANDS=2
 GIT_URL="ssh://git@github.com/q-sw/demo-cilium-mcs.git"
-CILIUM_VERSION="1.19.0-rc.0"
+CILIUM_VERSION="1.19.1"
 
 # Colors
 GREEN='\033[0;32m'
@@ -59,11 +59,11 @@ pe "cilium status --context amsterdam --wait"
 # 4. FluxCD Enrollment (Bootstrap)
 marker "FluxCD Bootstrap (Paris)"
 echo -e "${YELLOW}# Initializing FluxCD (GitOps) on Paris cluster${NC}"
-pe "flux bootstrap git --url=$GIT_URL --branch=main --path=flux/clusters/paris --context=paris --private-key-file ${HOME}/.ssh/id_ecdsa --silent"
+pe "flux bootstrap git --url=$GIT_URL --branch=ciliumcon-2026 --path=flux/clusters/paris --context=paris --private-key-file ${HOME}/.ssh/id_ecdsa --silent"
 
 marker "FluxCD Bootstrap (Amsterdam)"
 echo -e "${YELLOW}# Initializing FluxCD (GitOps) on Amsterdam cluster${NC}"
-pe "flux bootstrap git --url=$GIT_URL --branch=main --path=flux/clusters/amsterdam --context=amsterdam --private-key-file ${HOME}/.ssh/id_ecdsa --silent"
+pe "flux bootstrap git --url=$GIT_URL --branch=ciliumcon-2026 --path=flux/clusters/amsterdam --context=amsterdam --private-key-file ${HOME}/.ssh/id_ecdsa --silent"
 
 # 5. Verification
 marker "Flux Synchronization"
