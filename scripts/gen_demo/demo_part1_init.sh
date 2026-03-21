@@ -38,35 +38,35 @@ marker "Initial State"
 echo -e "${YELLOW}# Observing initial cluster state (CNI not installed)${NC}"
 pe "kubectl get nodes --context paris"
 pe "kubectl get pods -n kube-system --context paris"
-pe "kubectl get nodes --context newyork"
-pe "kubectl get pods -n kube-system --context newyork"
+pe "kubectl get nodes --context amsterdam"
+pe "kubectl get pods -n kube-system --context amsterdam"
 
 # 2. Installing Cilium via Helm
 marker "Cilium Installation (Paris)"
 echo -e "${YELLOW}# Installing Cilium on Paris cluster via Helm${NC}"
 pe "helm upgrade --install kube-system-cilium cilium/cilium --version $CILIUM_VERSION --namespace kube-system --kube-context paris -f init/cilium/values-paris.yaml"
 
-marker "Cilium Installation (New York)"
-echo -e "${YELLOW}# Installing Cilium on New York cluster via Helm${NC}"
-pe "helm upgrade --install kube-system-cilium cilium/cilium --version $CILIUM_VERSION --namespace kube-system --kube-context newyork -f init/cilium/values-newyork.yaml"
+marker "Cilium Installation (Amsterdam)"
+echo -e "${YELLOW}# Installing Cilium on Amsterdam cluster via Helm${NC}"
+pe "helm upgrade --install kube-system-cilium cilium/cilium --version $CILIUM_VERSION --namespace kube-system --kube-context amsterdam -f init/cilium/values-amsterdam.yaml"
 
 # 3. Verifying Cilium status
 marker "Cilium Verification"
 echo -e "${YELLOW}# Waiting for Cilium 'Ready' status${NC}"
 pe "cilium status --context paris --wait"
-pe "cilium status --context newyork --wait"
+pe "cilium status --context amsterdam --wait"
 
 # 4. FluxCD Enrollment (Bootstrap)
 marker "FluxCD Bootstrap (Paris)"
 echo -e "${YELLOW}# Initializing FluxCD (GitOps) on Paris cluster${NC}"
 pe "flux bootstrap git --url=$GIT_URL --branch=main --path=flux/clusters/paris --context=paris --private-key-file ${HOME}/.ssh/id_ecdsa --silent"
 
-marker "FluxCD Bootstrap (New York)"
-echo -e "${YELLOW}# Initializing FluxCD (GitOps) on New York cluster${NC}"
-pe "flux bootstrap git --url=$GIT_URL --branch=main --path=flux/clusters/newyork --context=newyork --private-key-file ${HOME}/.ssh/id_ecdsa --silent"
+marker "FluxCD Bootstrap (Amsterdam)"
+echo -e "${YELLOW}# Initializing FluxCD (GitOps) on Amsterdam cluster${NC}"
+pe "flux bootstrap git --url=$GIT_URL --branch=main --path=flux/clusters/amsterdam --context=amsterdam --private-key-file ${HOME}/.ssh/id_ecdsa --silent"
 
 # 5. Verification
 marker "Flux Synchronization"
 echo -e "${YELLOW}# Verifying Flux synchronization${NC}"
 pe "flux get kustomizations --context paris"
-pe "flux get kustomizations --context newyork"
+pe "flux get kustomizations --context amsterdam"

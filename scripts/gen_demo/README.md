@@ -16,7 +16,7 @@ Cilium Multi-Cluster project.
 
 The following tools must be installed and configured for the scripts to work:
 
-* `kubectl` (with `paris` and `newyork` contexts configured)
+* `kubectl` (with `paris` and `amsterdam` contexts configured)
 * `helm`
 * `cilium` CLI
 * `flux` CLI

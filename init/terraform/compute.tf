@@ -71,12 +71,12 @@ resource "google_compute_instance" "worker_paris" {
   }
 }
 
-# --- New York Compute Instances ---
+# --- Amsterdam Compute Instances ---
 
-resource "google_compute_instance" "cp_newyork" {
-  name         = "cp-newyork"
+resource "google_compute_instance" "cp_amsterdam" {
+  name         = "cp-amsterdam"
   machine_type = var.machine_type
-  zone         = "${var.region_newyork}-b"
+  zone         = "${var.region_amsterdam}-b"
 
   boot_disk {
     initialize_params {
@@ -86,16 +86,16 @@ resource "google_compute_instance" "cp_newyork" {
   }
 
   network_interface {
-    subnetwork = google_compute_subnetwork.subnet_newyork.self_link
+    subnetwork = google_compute_subnetwork.subnet_amsterdam.self_link
     access_config {} # Public IP
   }
 
   can_ip_forward = true
-  tags           = ["k8s-node", "newyork"]
+  tags           = ["k8s-node", "amsterdam"]
 
   labels = {
     k8s-role     = "control-plane"
-    cluster-name = "newyork"
+    cluster-name = "amsterdam"
   }
 
   service_account {
@@ -108,10 +108,10 @@ resource "google_compute_instance" "cp_newyork" {
   }
 }
 
-resource "google_compute_instance" "worker_newyork" {
-  name         = "worker-newyork"
+resource "google_compute_instance" "worker_amsterdam" {
+  name         = "worker-amsterdam"
   machine_type = var.machine_type
-  zone         = "${var.region_newyork}-b"
+  zone         = "${var.region_amsterdam}-b"
 
   boot_disk {
     initialize_params {
@@ -121,16 +121,16 @@ resource "google_compute_instance" "worker_newyork" {
   }
 
   network_interface {
-    subnetwork = google_compute_subnetwork.subnet_newyork.self_link
+    subnetwork = google_compute_subnetwork.subnet_amsterdam.self_link
     access_config {} # Public IP
   }
 
   can_ip_forward = true
-  tags           = ["k8s-node", "newyork"]
+  tags           = ["k8s-node", "amsterdam"]
 
   labels = {
     k8s-role     = "worker"
-    cluster-name = "newyork"
+    cluster-name = "amsterdam"
   }
 
   service_account {
@@ -165,14 +165,14 @@ resource "google_compute_instance_group" "paris_nodes" {
   }
 }
 
-resource "google_compute_instance_group" "newyork_nodes" {
-  name        = "k8s-nodes-newyork"
-  description = "Unmanaged Instance Group for New York K8s Nodes"
-  zone        = "${var.region_newyork}-b"
+resource "google_compute_instance_group" "amsterdam_nodes" {
+  name        = "k8s-nodes-amsterdam"
+  description = "Unmanaged Instance Group for Amsterdam K8s Nodes"
+  zone        = "${var.region_amsterdam}-b"
 
   instances = [
-    google_compute_instance.cp_newyork.self_link,
-    google_compute_instance.worker_newyork.self_link
+    google_compute_instance.cp_amsterdam.self_link,
+    google_compute_instance.worker_amsterdam.self_link
   ]
 
   named_port {

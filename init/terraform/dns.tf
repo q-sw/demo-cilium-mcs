@@ -11,7 +11,7 @@ resource "google_dns_managed_zone" "internal" {
       network_url = google_compute_network.vpc_paris.id
     }
     networks {
-      network_url = google_compute_network.vpc_newyork.id
+      network_url = google_compute_network.vpc_amsterdam.id
     }
   }
 
@@ -31,13 +31,13 @@ resource "google_dns_record_set" "cp_paris" {
   rrdatas = [google_compute_instance.cp_paris.network_interface.0.network_ip]
 }
 
-resource "google_dns_record_set" "cp_newyork" {
-  name         = "cp.newyork.${google_dns_managed_zone.internal.dns_name}"
+resource "google_dns_record_set" "cp_amsterdam" {
+  name         = "cp.amsterdam.${google_dns_managed_zone.internal.dns_name}"
   managed_zone = google_dns_managed_zone.internal.name
   type         = "A"
   ttl          = 300
 
-  rrdatas = [google_compute_instance.cp_newyork.network_interface.0.network_ip]
+  rrdatas = [google_compute_instance.cp_amsterdam.network_interface.0.network_ip]
 }
 
 # --- Cluster Mesh Records ---
@@ -54,14 +54,14 @@ resource "google_dns_record_set" "clustermesh_paris" {
   ]
 }
 
-resource "google_dns_record_set" "clustermesh_newyork" {
-  name         = "cp.newyork.clustermesh.${google_dns_managed_zone.internal.dns_name}"
+resource "google_dns_record_set" "clustermesh_amsterdam" {
+  name         = "cp.amsterdam.clustermesh.${google_dns_managed_zone.internal.dns_name}"
   managed_zone = google_dns_managed_zone.internal.name
   type         = "A"
   ttl          = 300
 
   rrdatas = [
-    google_compute_instance.cp_newyork.network_interface.0.network_ip,
-    google_compute_instance.worker_newyork.network_interface.0.network_ip
+    google_compute_instance.cp_amsterdam.network_interface.0.network_ip,
+    google_compute_instance.worker_amsterdam.network_interface.0.network_ip
   ]
 }

@@ -5,11 +5,11 @@ metadata:
   namespace: default
 spec:
   values:
-    clusterName: "newyork"
+    clusterName: "amsterdam"
     image:
       tag: "1.0.0"
     gateway:
       enabled: true
-      hostname: "newyork.demo.qws.xyz"
-      mcsHostname: "newyork-mcs.demo.qws.xyz"
-      headlessHostname: "newyork-headless.demo.qws.xyz"
+      hostname: "amsterdam.demo.qws.xyz"
+      mcsHostname: "amsterdam-mcs.demo.qws.xyz"
+      headlessHostname: "amsterdam-headless.demo.qws.xyz"

@@ -36,9 +36,9 @@ resource "google_compute_subnetwork" "proxy_subnet_paris" {
   role          = "ACTIVE"
 }
 
-# --- VPC New York ---
-resource "google_compute_network" "vpc_newyork" {
-  name                    = "vpc-dc-newyork"
+# --- VPC Amsterdam ---
+resource "google_compute_network" "vpc_amsterdam" {
+  name                    = "vpc-dc-amsterdam"
   auto_create_subnetworks = false
 
   depends_on = [
@@ -47,43 +47,43 @@ resource "google_compute_network" "vpc_newyork" {
   ]
 }
 
-resource "google_compute_subnetwork" "subnet_newyork" {
-  name          = "subnet-dc-newyork"
-  ip_cidr_range = var.cidr_newyork
-  region        = var.region_newyork
-  network       = google_compute_network.vpc_newyork.id
+resource "google_compute_subnetwork" "subnet_amsterdam" {
+  name          = "subnet-dc-amsterdam"
+  ip_cidr_range = var.cidr_amsterdam
+  region        = var.region_amsterdam
+  network       = google_compute_network.vpc_amsterdam.id
 
   secondary_ip_range {
     range_name    = "pods"
-    ip_cidr_range = var.pods_cidr_newyork
+    ip_cidr_range = var.pods_cidr_amsterdam
   }
 
   secondary_ip_range {
     range_name    = "lb-alias"
-    ip_cidr_range = var.lb_cidr_newyork
+    ip_cidr_range = var.lb_cidr_amsterdam
   }
 }
 
-# Proxy-only subnet for New York
-resource "google_compute_subnetwork" "proxy_subnet_newyork" {
-  name          = "proxy-subnet-newyork"
+# Proxy-only subnet for Amsterdam
+resource "google_compute_subnetwork" "proxy_subnet_amsterdam" {
+  name          = "proxy-subnet-amsterdam"
   ip_cidr_range = "10.130.0.0/23"
-  region        = var.region_newyork
-  network       = google_compute_network.vpc_newyork.id
+  region        = var.region_amsterdam
+  network       = google_compute_network.vpc_amsterdam.id
   purpose       = "REGIONAL_MANAGED_PROXY"
   role          = "ACTIVE"
 }
 
 # --- VPC Peering (Bidirectional) ---
-resource "google_compute_network_peering" "peering_paris_to_ny" {
-  name         = "peering-paris-to-ny"
+resource "google_compute_network_peering" "peering_paris_to_ams" {
+  name         = "peering-paris-to-ams"
   network      = google_compute_network.vpc_paris.self_link
-  peer_network = google_compute_network.vpc_newyork.self_link
+  peer_network = google_compute_network.vpc_amsterdam.self_link
 }
 
-resource "google_compute_network_peering" "peering_ny_to_paris" {
-  name         = "peering-ny-to-paris"
-  network      = google_compute_network.vpc_newyork.self_link
+resource "google_compute_network_peering" "peering_ams_to_paris" {
+  name         = "peering-ams-to-paris"
+  network      = google_compute_network.vpc_amsterdam.self_link
   peer_network = google_compute_network.vpc_paris.self_link
 }
 
@@ -102,17 +102,17 @@ resource "google_compute_router_nat" "nat_paris" {
   source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
 }
 
-# --- Cloud NAT New York ---
-resource "google_compute_router" "router_newyork" {
-  name    = "router-newyork"
-  region  = var.region_newyork
-  network = google_compute_network.vpc_newyork.id
+# --- Cloud NAT Amsterdam ---
+resource "google_compute_router" "router_amsterdam" {
+  name    = "router-amsterdam"
+  region  = var.region_amsterdam
+  network = google_compute_network.vpc_amsterdam.id
 }
 
-resource "google_compute_router_nat" "nat_newyork" {
-  name                               = "nat-newyork"
-  router                             = google_compute_router.router_newyork.name
-  region                             = var.region_newyork
+resource "google_compute_router_nat" "nat_amsterdam" {
+  name                               = "nat-amsterdam"
+  router                             = google_compute_router.router_amsterdam.name
+  region                             = var.region_amsterdam
   nat_ip_allocate_option             = "AUTO_ONLY"
   source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
 }

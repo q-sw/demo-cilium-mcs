@@ -61,12 +61,12 @@ kubectl create secret generic cilium-ca \
     kubectl annotate secret cilium-ca -n kube-system --context paris meta.helm.sh/release-name=kube-system-cilium --overwrite &&
     kubectl annotate secret cilium-ca -n kube-system --context paris meta.helm.sh/release-namespace=kube-system --overwrite
 echo ""
-echo "# Cluster New York"
+echo "# Cluster Amsterdam"
 kubectl create secret generic cilium-ca \
     --from-file=ca.crt=ca.pem \
     --from-file=ca.key=ca-key.pem \
-    -n kube-system --context newyork --dry-run=client -o yaml |
-    kubectl apply --context newyork -f - &&
-    kubectl label secret cilium-ca -n kube-system --context newyork app.kubernetes.io/managed-by=Helm --overwrite &&
-    kubectl annotate secret cilium-ca -n kube-system --context newyork meta.helm.sh/release-name=kube-system-cilium --overwrite &&
-    kubectl annotate secret cilium-ca -n kube-system --context newyork meta.helm.sh/release-namespace=kube-system --overwrite
+    -n kube-system --context amsterdam --dry-run=client -o yaml |
+    kubectl apply --context amsterdam -f - &&
+    kubectl label secret cilium-ca -n kube-system --context amsterdam app.kubernetes.io/managed-by=Helm --overwrite &&
+    kubectl annotate secret cilium-ca -n kube-system --context amsterdam meta.helm.sh/release-name=kube-system-cilium --overwrite &&
+    kubectl annotate secret cilium-ca -n kube-system --context amsterdam meta.helm.sh/release-namespace=kube-system --overwrite

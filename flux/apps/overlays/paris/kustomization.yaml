@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - ../../base/demo-app
   - ../../base/toolbox
-  - policies/deny-newyork.yaml
+  - policies/deny-amsterdam.yaml
 patches:
   - path: patch-values.yaml
     target:

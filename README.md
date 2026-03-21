@@ -13,7 +13,7 @@
 - FluxCD CLI
 - Kubectl
 
-## Build and configure Kubernetes Clusters (`paris` and `newyork`)
+## Build and configure Kubernetes Clusters (`paris` and `amsterdam`)
 
 ### Step 1: Create the infrastructure for 2 Kubernetes Clusters
 
@@ -38,7 +38,7 @@ make gateway-api-install
 ### Step 4: Export kubeconfig for both clusters
 
 > this command downloads the  kubeconfig from each cluster and merges it into
-> `~/.kube/config`, creating two contexts `paris` and `newyork`
+> `~/.kube/config`, creating two contexts `paris` and `amsterdam`
 
 ```bash
 make kubeconfig
@@ -74,12 +74,12 @@ helm upgrade --install kube-system-cilium cilium/cilium \
     -f init/cilium/values-paris.yaml
 ```
 
-### Initialize Cilium in New York
+### Initialize Cilium in Amsterdam
 
 ```bash
 helm upgrade --install kube-system-cilium cilium/cilium \
-    --version 1.19.1 --namespace kube-system --kube-context newyork\
-    -f init/cilium/values-newyork.yaml
+    --version 1.19.1 --namespace kube-system --kube-context amsterdam\
+    -f init/cilium/values-amsterdam.yaml
 ```
 
 ### Check Cilium status
@@ -100,12 +100,12 @@ flux bootstrap git --url=ssh://git@github.com/${GITHUB_USERNAME}/${REPO_NAME}.gi
     --context paris
 ```
 
-### Step 2: Bootstrap FluxCD in the New York Cluster
+### Step 2: Bootstrap FluxCD in the Amsterdam Cluster
 
 ```bash
 flux bootstrap git --url=ssh://git@github.com/${GITHUB_USERNAME}/${REPO_NAME}.git \
-    --branch=main --path=flux/clusters/newyork --private-key-file ${KEY_PATH} \
-    --context newyork
+    --branch=main --path=flux/clusters/amsterdam --private-key-file ${KEY_PATH} \
+    --context amsterdam
 ```
 
 ### Some commands to check FluxCD Status
@@ -133,7 +133,7 @@ kubectl get helmrelease cilium -n flux-system -o yaml
 
 ```bash
 cilium clustermesh status --context paris
-cilium clustermesh status --context newyork
+cilium clustermesh status --context amsterdam
 ```
 
 ### Step 2: Verify MCS API Resources
@@ -165,16 +165,16 @@ done
 
 ### Step 5: Verify Network Policies
 
-Check the Cilium Network Policy that blocks ingress from New York.
+Check the Cilium Network Policy that blocks ingress from Amsterdam.
 
 ```bash
-kubectl get cnp deny-ingress-from-newyork --context paris
+kubectl get cnp deny-ingress-from-amsterdam --context paris
 ```
 
-Test access from New York to Paris (should be blocked or timeout).
+Test access from Amsterdam to Paris (should be blocked or timeout).
 
 ```bash
-kubectl --context newyork exec deploy/toolbox -- curl --connect-timeout 2 -s demo-app.default.svc.clusterset.local/api
+kubectl --context amsterdam exec deploy/toolbox -- curl --connect-timeout 2 -s demo-app.default.svc.clusterset.local/api
 ```
 
 ### Step 6: Observability with Hubble
@@ -205,7 +205,7 @@ to your services.
 
 ```bash
 kubectl get httproute --context paris
-kubectl get httproute --context newyork
+kubectl get httproute --context amsterdam
 ```
 
 ### Step 2: Access the UI
@@ -214,7 +214,7 @@ Open your web browser and navigate to the URLs configured in your `/etc/hosts`.
 You should see the "Cilium Multi-Cluster Demo" UI.
 
 - **Paris Gateway:** [http://paris-mcs.demo.qws.xyz](http://paris-mcs.demo.qws.xyz)
-- **New York Gateway:** [http://newyork-mcs.demo.qws.xyz](http://newyork-mcs.demo.qws.xyz)
+- **Amsterdam Gateway:** [http://amsterdam-mcs.demo.qws.xyz](http://amsterdam-mcs.demo.qws.xyz)
 
 The UI displays which pod (cluster and pod name) served the request. Refresh the page to see the load balancing in
 action (if enabled) or how local traffic is prioritized.

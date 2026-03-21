@@ -2,7 +2,7 @@
 apiVersion: "cilium.io/v2"
 kind: CiliumNetworkPolicy
 metadata:
-  name: deny-ingress-from-newyork
+  name: deny-ingress-from-amsterdam
   namespace: default
 spec:
   endpointSelector:
@@ -19,4 +19,4 @@ spec:
     - fromEndpoints:
         - matchLabels:
             app: demo-app
-            io.cilium.k8s.policy.cluster: "cluster-newyork"
+            io.cilium.k8s.policy.cluster: "cluster-amsterdam"

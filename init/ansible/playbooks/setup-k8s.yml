@@ -24,18 +24,18 @@
       args:
         creates: /etc/kubernetes/kubelet.conf
 
-# --- Cluster New York ---
-- name: Initialize Control Plane (New York)
-  hosts: cluster_newyork:&k8s_role_control_plane
+# --- Cluster Amsterdam ---
+- name: Initialize Control Plane (Amsterdam)
+  hosts: cluster_amsterdam:&k8s_role_control_plane
   roles:
     - control-plane
 
-- name: Join Workers (New York)
-  hosts: cluster_newyork:&k8s_role_worker
+- name: Join Workers (Amsterdam)
+  hosts: cluster_amsterdam:&k8s_role_worker
   tasks:
     - name: Retrieve join command
       set_fact:
-        join_command: "{{ hostvars[groups['cluster_newyork'] | intersect(groups['k8s_role_control_plane']) | first]['join_command'] }}"
+        join_command: "{{ hostvars[groups['cluster_amsterdam'] | intersect(groups['k8s_role_control_plane']) | first]['join_command'] }}"
 
     - name: Join cluster
       command: "{{ join_command }}"

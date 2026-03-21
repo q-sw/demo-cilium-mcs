@@ -6,9 +6,9 @@ metadata:
 spec:
   values:
     cluster:
-      name: cluster-newyork
+      name: cluster-amsterdam
       id: 2
-    k8sServiceHost: cp.newyork.internal
+    k8sServiceHost: cp.amsterdam.internal
     ipam:
       operator:
         clusterPoolIPv4PodCIDRList:
@@ -22,8 +22,8 @@ spec:
           cluster-paris:
             address: cp.paris.clustermesh.internal
             port: 32379
-          cluster-newyork:
-            address: cp.newyork.clustermesh.internal
+          cluster-amsterdam:
+            address: cp.amsterdam.clustermesh.internal
             port: 32379
       apiserver:
         kvstoremesh:
@@ -39,7 +39,7 @@ spec:
           server:
             extraDnsNames:
               - "*.clustermesh.internal"
-              - cp.newyork.clustermesh.internal
+              - cp.amsterdam.clustermesh.internal
       mcsapi:
         enabled: true
         corednsAutoConfigure:

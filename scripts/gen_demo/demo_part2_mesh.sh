@@ -33,13 +33,13 @@ echo ""
 marker "Flux Synchronization"
 echo -e "${YELLOW}# Verifying Flux synchronization${NC}"
 pe "flux get kustomizations --context paris"
-pe "flux get kustomizations --context newyork"
+pe "flux get kustomizations --context amsterdam"
 
 # 1. Cluster Mesh status verification
 marker "Cluster Mesh Verification"
 echo -e "${YELLOW}# Checking cluster interconnection${NC}"
 pe "cilium clustermesh status --context paris"
-pe "cilium clustermesh status --context newyork"
+pe "cilium clustermesh status --context amsterdam"
 
 # 2. MCS API ServiceExports verification
 marker "MCS API Resources"
@@ -48,9 +48,9 @@ pe "kubectl get service --context paris"
 pe "kubectl get serviceexports --context paris"
 pe "kubectl get serviceimports --context paris"
 echo ""
-pe "kubectl get service --context newyork"
-pe "kubectl get serviceexports --context newyork"
-pe "kubectl get serviceimports --context newyork"
+pe "kubectl get service --context amsterdam"
+pe "kubectl get serviceexports --context amsterdam"
+pe "kubectl get serviceimports --context amsterdam"
 
 # 3. DNS resolution test for Clusterset (Paris -> Global)
 marker "Global DNS Resolution"
@@ -59,19 +59,19 @@ pe "kubectl --context paris exec -it deploy/toolbox -- dig +short demo-app.defau
 
 # 4. Connectivity test (using JSON API)
 marker "Multi-Cluster Connectivity"
-echo -e "${YELLOW}# Accessing global service via JSON API (balanced between Paris and NY)${NC}"
+echo -e "${YELLOW}# Accessing global service via JSON API (balanced between Paris and AMS)${NC}"
 pe "for i in {1..10};do kubectl --context paris exec deploy/toolbox -- curl --connect-timeout 2 -s demo-app.default.svc.clusterset.local/api | jq '.'; done "
 
 # 5. CiliumNetworkPolicy demonstration
 marker "Network Policy"
-echo -e "${YELLOW}# Verifying Network Policy (Blocking New York -> Paris)${NC}"
-pe "kubectl get cnp deny-ingress-from-newyork --context paris -o yaml"
+echo -e "${YELLOW}# Verifying Network Policy (Blocking Amsterdam -> Paris)${NC}"
+pe "kubectl get cnp deny-ingress-from-amsterdam --context paris -o yaml"
 
 # 6. Blocked access test
 marker "Blocking Test"
-echo -e "${YELLOW}# Attempting access from New York to Paris (should fail)${NC}"
+echo -e "${YELLOW}# Attempting access from Amsterdam to Paris (should fail)${NC}"
 # shellcheck disable=SC2016
-pe 'for i in {1..10}; do if output=$(kubectl --context newyork exec deploy/toolbox -- curl --connect-timeout 1 -s demo-app.default.svc.clusterset.local/api 2>/dev/null); then echo "$output" | jq "."; else echo "ACCESS BLOCKED BY NETWORK POLICY"; fi; done '
+pe 'for i in {1..10}; do if output=$(kubectl --context amsterdam exec deploy/toolbox -- curl --connect-timeout 1 -s demo-app.default.svc.clusterset.local/api 2>/dev/null); then echo "$output" | jq "."; else echo "ACCESS BLOCKED BY NETWORK POLICY"; fi; done '
 
 # 7. Hubble visualization
 marker "Hubble Observability"

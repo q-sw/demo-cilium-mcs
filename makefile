@@ -39,7 +39,7 @@ k8s-install: ## Install Kubernetes on VMs via Ansible
 
 #-- Access & Connectivity --
 
-kubeconfig: ## Fetch and merge Kubeconfigs (Contexts: paris, newyork)
+kubeconfig: ## Fetch and merge Kubeconfigs (Contexts: paris, amsterdam)
 	./scripts/fetch_kubeconfigs.sh
 
 cilium-install: ## Install Cilium and connect clusters (Cluster Mesh)
@@ -54,13 +54,13 @@ dns-local: ## Update local /etc/hosts with CP Public IPs
 gateway-patch: ## Patch Gateway services with fixed NodePorts (30080, 30443)
 	@echo "Patching Paris Gateway Service..."
 	kubectl patch svc -n kube-system cilium-gateway-cilium-gateway --context paris --type='json' -p='[{"op": "replace", "path": "/spec/ports/0/nodePort", "value": 30080}, {"op": "replace", "path": "/spec/ports/1/nodePort", "value": 30443}]' || true
-	@echo "Patching New York Gateway Service..."
-	kubectl patch svc -n kube-system cilium-gateway-cilium-gateway --context newyork --type='json' -p='[{"op": "replace", "path": "/spec/ports/0/nodePort", "value": 30080}, {"op": "replace", "path": "/spec/ports/1/nodePort", "value": 30443}]' || true
+	@echo "Patching Amsterdam Gateway Service..."
+	kubectl patch svc -n kube-system cilium-gateway-cilium-gateway --context amsterdam --type='json' -p='[{"op": "replace", "path": "/spec/ports/0/nodePort", "value": 30080}, {"op": "replace", "path": "/spec/ports/1/nodePort", "value": 30443}]' || true
 
 gateway-api-install: ## Install Gateway API CRDs (v1.2.0)
 	@echo "Installing Gateway API CRDs..."
 	kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml --context paris
-	kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml --context newyork
+	kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml --context amsterdam
 
 #-- Demo Application --
 
@@ -76,10 +76,10 @@ app-deploy-global: ## Deploy app with Global Service (Annotation)
 		--set clusterName=paris \
 		-f ./app/chart/values-global-service.yaml
 	helm upgrade --install demo-app ./app/chart \
-		--kube-context newyork \
+		--kube-context amsterdam \
 		--set image.repository=$(shell echo $(IMAGE_NAME) | cut -d: -f1) \
 		--set image.tag=$(shell echo $(IMAGE_NAME) | cut -d: -f2) \
-		--set clusterName=newyork \
+		--set clusterName=amsterdam \
 		-f ./app/chart/values-global-service.yaml
 
 app-deploy-mcs: ## Deploy app with MCS API (ServiceExport)
@@ -91,10 +91,10 @@ app-deploy-mcs: ## Deploy app with MCS API (ServiceExport)
 		-f ./app/chart/values-mcs.yaml
 
 	helm upgrade --install demo-app ./app/chart \
-		--kube-context newyork \
+		--kube-context amsterdam \
 		--set image.repository=$(shell echo $(IMAGE_NAME) | cut -d: -f1) \
 		--set image.tag=$(shell echo $(IMAGE_NAME) | cut -d: -f2) \
-		--set clusterName=newyork \
+		--set clusterName=amsterdam \
 		-f ./app/chart/values-mcs.yaml
 
 #-- All-in-One --

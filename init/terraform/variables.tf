@@ -10,8 +10,8 @@ variable "region_paris" {
   default     = "europe-west9"
 }
 
-variable "region_newyork" {
-  description = "Region for the second simulated DC (New York)"
+variable "region_amsterdam" {
+  description = "Region for the second simulated DC (Amsterdam)"
   type        = string
   default     = "us-east1"
 }
@@ -22,8 +22,8 @@ variable "cidr_paris" {
   default     = "10.10.0.0/16"
 }
 
-variable "cidr_newyork" {
-  description = "CIDR block for New York VPC"
+variable "cidr_amsterdam" {
+  description = "CIDR block for Amsterdam VPC"
   type        = string
   default     = "10.20.0.0/16"
 }
@@ -34,8 +34,8 @@ variable "pods_cidr_paris" {
   default     = "10.200.0.0/16"
 }
 
-variable "pods_cidr_newyork" {
-  description = "CIDR block for New York Pods (Secondary Range)"
+variable "pods_cidr_amsterdam" {
+  description = "CIDR block for Amsterdam Pods (Secondary Range)"
   type        = string
   default     = "10.201.0.0/16"
 }
@@ -46,8 +46,8 @@ variable "lb_cidr_paris" {
   default     = "10.150.0.0/24"
 }
 
-variable "lb_cidr_newyork" {
-  description = "CIDR block for New York Load Balancers (Secondary Range)"
+variable "lb_cidr_amsterdam" {
+  description = "CIDR block for Amsterdam Load Balancers (Secondary Range)"
   type        = string
   default     = "10.151.0.0/24"
 }

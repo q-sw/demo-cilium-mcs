@@ -22,8 +22,8 @@ spec:
           cluster-paris:
             address: cp.paris.clustermesh.internal
             port: 32379
-          cluster-newyork:
-            address: cp.newyork.clustermesh.internal
+          cluster-amsterdam:
+            address: cp.amsterdam.clustermesh.internal
             port: 32379
       apiserver:
         # FIXME: If you need HA increase this to 2 or more

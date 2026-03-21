@@ -8,7 +8,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./flux/apps/overlays/newyork
+  path: ./flux/apps/overlays/amsterdam
   prune: true
   wait: true
   timeout: 5m

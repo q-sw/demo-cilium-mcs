@@ -38,16 +38,16 @@ resource "google_compute_firewall" "allow_internal_paris" {
   source_ranges = [var.cidr_paris]
 }
 
-# Allow traffic from New York VPC (for Cluster Mesh)
-resource "google_compute_firewall" "allow_from_ny" {
-  name    = "fw-paris-allow-from-ny"
+# Allow traffic from Amsterdam VPC (for Cluster Mesh)
+resource "google_compute_firewall" "allow_from_ams" {
+  name    = "fw-paris-allow-from-ams"
   network = google_compute_network.vpc_paris.name
 
   allow {
     protocol = "all"
   }
 
-  source_ranges = [var.cidr_newyork]
+  source_ranges = [var.cidr_amsterdam]
 }
 
 # --- Gateway API / Load Balancer Rules (Paris) ---
@@ -79,12 +79,12 @@ resource "google_compute_firewall" "allow_gcp_health_checks" {
 }
 
 
-# --- Firewall New York ---
+# --- Firewall Amsterdam ---
 
 # Allow SSH from Public IP (User)
-resource "google_compute_firewall" "allow_public_access_newyork" {
-  name    = "fw-newyork-allow-public-access"
-  network = google_compute_network.vpc_newyork.name
+resource "google_compute_firewall" "allow_public_access_amsterdam" {
+  name    = "fw-amsterdam-allow-public-access"
+  network = google_compute_network.vpc_amsterdam.name
 
   allow {
     protocol = "tcp"
@@ -95,9 +95,9 @@ resource "google_compute_firewall" "allow_public_access_newyork" {
 }
 
 # Allow SSH from IAP
-resource "google_compute_firewall" "allow_ssh_iap_newyork" {
-  name    = "fw-newyork-allow-ssh-iap"
-  network = google_compute_network.vpc_newyork.name
+resource "google_compute_firewall" "allow_ssh_iap_amsterdam" {
+  name    = "fw-amsterdam-allow-ssh-iap"
+  network = google_compute_network.vpc_amsterdam.name
 
   allow {
     protocol = "tcp"
@@ -107,22 +107,22 @@ resource "google_compute_firewall" "allow_ssh_iap_newyork" {
   source_ranges = ["35.235.240.0/20"]
 }
 
-# Allow Internal traffic within New York VPC
-resource "google_compute_firewall" "allow_internal_newyork" {
-  name    = "fw-newyork-allow-internal"
-  network = google_compute_network.vpc_newyork.name
+# Allow Internal traffic within Amsterdam VPC
+resource "google_compute_firewall" "allow_internal_amsterdam" {
+  name    = "fw-amsterdam-allow-internal"
+  network = google_compute_network.vpc_amsterdam.name
 
   allow {
     protocol = "all"
   }
 
-  source_ranges = [var.cidr_newyork]
+  source_ranges = [var.cidr_amsterdam]
 }
 
 # Allow traffic from Paris VPC (for Cluster Mesh)
 resource "google_compute_firewall" "allow_from_paris" {
-  name    = "fw-newyork-allow-from-paris"
-  network = google_compute_network.vpc_newyork.name
+  name    = "fw-amsterdam-allow-from-paris"
+  network = google_compute_network.vpc_amsterdam.name
 
   allow {
     protocol = "all"
@@ -131,12 +131,12 @@ resource "google_compute_firewall" "allow_from_paris" {
   source_ranges = [var.cidr_paris]
 }
 
-# --- Gateway API / Load Balancer Rules (New York) ---
+# --- Gateway API / Load Balancer Rules (Amsterdam) ---
 
 # Allow traffic from Proxy Subnet to Gateway (NodePort)
-resource "google_compute_firewall" "allow_proxy_subnet_newyork" {
-  name    = "allow-proxy-subnet-newyork"
-  network = google_compute_network.vpc_newyork.name
+resource "google_compute_firewall" "allow_proxy_subnet_amsterdam" {
+  name    = "allow-proxy-subnet-amsterdam"
+  network = google_compute_network.vpc_amsterdam.name
 
   allow {
     protocol = "tcp"
@@ -146,10 +146,10 @@ resource "google_compute_firewall" "allow_proxy_subnet_newyork" {
   source_ranges = ["0.0.0.0/0"]
 }
 
-# Allow GCP Health Checks for New York
-resource "google_compute_firewall" "allow_gcp_health_checks_newyork" {
-  name    = "allow-gcp-health-checks-newyork"
-  network = google_compute_network.vpc_newyork.name
+# Allow GCP Health Checks for Amsterdam
+resource "google_compute_firewall" "allow_gcp_health_checks_amsterdam" {
+  name    = "allow-gcp-health-checks-amsterdam"
+  network = google_compute_network.vpc_amsterdam.name
 
   allow {
     protocol = "tcp"
