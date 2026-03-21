@@ -27,12 +27,10 @@ make infra-create
 make  k8s-install
 ```
 
-### Step 3: Install Gateway API CRDs
-
-> Install the standard Gateway API CRDs on both clusters.
+### Step 3: Add Cluster IP in `/etc/hosts`
 
 ```bash
-make gateway-api-install
+make dns-local
 ```
 
 ### Step 4: Export kubeconfig for both clusters
@@ -44,7 +42,16 @@ make gateway-api-install
 make kubeconfig
 ```
 
-### Step 5: Create CA for Cilium
+### Step 5: Install Gateway API CRDs
+
+> Install the standard Gateway API CRDs on both clusters.
+
+```bash
+make gateway-api-install
+```
+
+
+### Step 6: Create CA for Cilium
 
 > Create a CA certificate and key to sign all certificates in Cilium in both clusters
 
@@ -55,11 +62,6 @@ make certs-generate
 > The script also creates a Kubernetes Secret `cilium-ca` in the `kube-system` namespace
 > It also adds labels and annotations to be managed by Helm later
 
-### Step 6: Add Cluster IP in `/etc/hosts`
-
-```bash
-make dns-local
-```
 
 ## Initialize Cilium
 
