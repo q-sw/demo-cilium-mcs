@@ -47,13 +47,13 @@ func getTheme(clusterName string) UITheme {
 			Icon:       "🗼",
 			Location:   "Paris, France",
 		}
-	} else if strings.Contains(lowerName, "newyork") || strings.Contains(lowerName, "ny") {
+	} else if strings.Contains(lowerName, "amsterdam") || strings.Contains(lowerName, "ams") {
 		theme = UITheme{
-			Title:      "Hello from New York",
-			Color:      "#FF5E0E",                                           // NY Orange-ish
+			Title:      "Hello from Amsterdam",
+			Color:      "#FF5E0E",                                           // Amsterdam Orange
 			Background: "linear-gradient(135deg, #fccb90 0%, #d57eeb 100%)", // Orange/Sunset
-			Icon:       "🗽",
-			Location:   "New York, USA",
+			Icon:       "🌷",
+			Location:   "Amsterdam, Netherlands",
 		}
 	}
 
