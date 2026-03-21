@@ -33,7 +33,13 @@ infra-start: ## Start all K8s VMs
 
 #-- Kubernetes (Ansible) --
 
-k8s-install: ## Install Kubernetes on VMs via Ansible
+ansible-deps: ## Install Ansible dependencies (collections and Python libs)
+	@echo "Installing Ansible collections..."
+	ansible-galaxy collection install google.cloud community.general
+	@echo "Injecting required Python libraries into ansible-core via pipx..."
+	pipx inject ansible-core google-auth requests
+
+k8s-install: ansible-deps ## Install Kubernetes on VMs via Ansible
 	sleep 20
 	cd init/ansible && ansible-playbook playbooks/setup-k8s.yml
 

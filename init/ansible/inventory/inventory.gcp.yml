@@ -1,13 +1,11 @@
 plugin: google.cloud.gcp_compute
-projects:
-  - qsw-demo-multi-cluster
 zones:
   - europe-west9-a
   - europe-west9-b
   - europe-west9-c
-  - us-east1-a
-  - us-east1-b
-  - us-east1-c
+  - europe-west4-a
+  - europe-west4-b
+  - europe-west4-c
 filters:
   - status = RUNNING
 auth_kind: application
