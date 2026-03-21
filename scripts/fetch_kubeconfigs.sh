@@ -3,7 +3,7 @@ set -e
 
 # Variables
 ZONE_PARIS="europe-west9-b"
-ZONE_AMS="us-east1-b"
+ZONE_AMS="europe-west4-b"
 
 echo "=== Fetching Kubeconfig from Paris ==="
 gcloud compute ssh ubuntu@cp-paris --zone $ZONE_PARIS --tunnel-through-iap --command "sudo cp /etc/kubernetes/admin.conf /tmp/paris.conf && sudo chmod 644 /tmp/paris.conf"

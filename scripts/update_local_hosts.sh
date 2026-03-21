@@ -2,9 +2,9 @@
 set -e
 
 ZONE_PARIS="europe-west9-b"
-ZONE_AMS="us-east1-b"
+ZONE_AMS="europe-west4-b"
 REGION_PARIS="europe-west9"
-REGION_AMS="us-east1"
+REGION_AMS="europe-west4"
 
 # Infrastructure Hostnames (pointing to CP nodes)
 HOST_PARIS="cp.paris.internal"
