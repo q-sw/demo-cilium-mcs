@@ -13,7 +13,7 @@ variable "region_paris" {
 variable "region_amsterdam" {
   description = "Region for the second simulated DC (Amsterdam)"
   type        = string
-  default     = "us-east1"
+  default     = "europe-west4"
 }
 
 variable "cidr_paris" {
