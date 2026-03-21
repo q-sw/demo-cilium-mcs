@@ -8,10 +8,10 @@ metadata:
 spec:
   interval: 1m0s
   ref:
-    branch: main
+    branch: ciliumcon-2026
   secretRef:
     name: flux-system
-  url: ssh://git@github.com/q-sw/gitops-and-multi-cluster-demo.git
+  url: ssh://git@github.com/q-sw/demo-cilium-mcs.git
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
